@@ -1,0 +1,27 @@
+name: long-bot
+on:
+  schedule:
+    - cron: "30 15 * * 1-5"   # 15:30 UTC = 16:30 Warsaw in winter, 17:30 in summer; both are inside US market hours
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency: long-bot
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: pip }
+      - run: pip install -r requirements.txt
+      - name: Run long bot (live, paper account)
+        env:
+          APCA_API_KEY_ID: ${{ secrets.LONG_KEY_ID }}
+          APCA_API_SECRET_KEY: ${{ secrets.LONG_SECRET }}
+        run: python alpaca_aggressive_bot.py --live 2>&1 | tee -a bot_logs/auto_run.log
+      - name: Save logs and stake state
+        run: |
+          git config user.name "bot"; git config user.email "bot@users.noreply.github.com"
+          git add bot_logs
+          git diff --cached --quiet || (git commit -m "long bot run $(date -u +%F)" && git pull --rebase && git push)

@@ -1,0 +1,29 @@
+name: fast-bot
+on:
+  schedule:
+    - cron: "25 13 * * 1-5"   # shift 1: waits for the open (14:30 UTC winter, 13:30 UTC summer), runs about 5.5 h
+    - cron: "5 19 * * 1-5"    # shift 2: covers the rest of the session until the close
+  workflow_dispatch: {}
+permissions:
+  contents: write
+concurrency: fast-bot
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: pip }
+      - run: pip install -r requirements.txt
+      - name: Run fast bot (live, paper account)
+        env:
+          APCA_API_KEY_ID: ${{ secrets.FAST_KEY_ID }}
+          APCA_API_SECRET_KEY: ${{ secrets.FAST_SECRET }}
+        run: python fast_bot.py --max-minutes 330
+      - name: Save logs
+        if: always()
+        run: |
+          git config user.name "bot"; git config user.email "bot@users.noreply.github.com"
+          git add bot_logs_fast
+          git diff --cached --quiet || (git commit -m "fast bot logs $(date -u +%F-%H%M)" && git pull --rebase && git push)

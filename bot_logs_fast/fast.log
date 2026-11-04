@@ -1,0 +1,29 @@
+2026-10-28 17:28:52 fast bot start DRY replay_h 6.0
+2026-10-28 17:28:54 SIGNAL MSFT score=1 age=8630s usd=19.99 Microsoft Earnings Top Item to Watch for AI Stocks: Dan Ives Says 'Most Important Print of
+2026-10-28 17:30:59 fast bot end
+2026-10-28 17:31:23 SOLD AAPL 345.444 pnl=-2.6bp smoke test
+2026-10-28 18:32:23 fast bot start LIVE replay_h 0
+2026-10-29 14:25:05 fast bot start LIVE replay_h 0
+2026-10-29 16:07:43 fast bot start DRY replay_h 0
+2026-10-29 16:08:04 fast bot end
+2026-10-29 19:31:43 fast bot start DRY replay_h 0
+2026-10-29 19:32:26 fast bot end
+2026-10-29 19:32:26 fast bot start LIVE replay_h 0
+2026-10-29 21:00:09 market closed, exiting
+2026-10-30 14:27:35 fast bot start LIVE replay_h 0
+2026-10-30 18:51:29 skip stale AMZN 1184s Amazon Is Spending Billions to Win the AI Race — Will the Gamble Pay O
+2026-10-30 20:10:20 skip stale MSFT 489s Microsoft and The Estée Lauder Companies Announce Strategic AI Partner
+2026-10-30 21:07:32 market closed, exiting
+2026-11-02 14:27:49 fast bot start LIVE replay_h 0
+2026-11-02 17:13:20 skip stale MSFT 699s Syndigo Announces Multi-Year Strategic Partnership with Microsoft
+2026-11-02 20:16:44 skip stale PLTR 4353s Palantir Just Became Worth Four ServiceNows — That Raises a $333 Billi
+2026-11-02 22:34:16 market closed, exiting
+2026-11-03 14:34:22 fast bot start LIVE replay_h 0
+2026-11-03 16:14:16 fast bot start LIVE replay_h 0
+2026-11-03 16:14:55 fast bot start LIVE replay_h 0
+2026-11-03 18:16:08 fast bot start LIVE replay_h 0
+2026-11-03 20:24:26 SIGNAL MSFT score=1 age=116s usd=19.97 'Jill Hazelbaker Jumps To OpenAI As Chief Corporate Affairs Officer' - Axios
+2026-11-03 20:24:27 BOUGHT MSFT 521.332 0.038286542
+2026-11-03 20:39:45 SOLD MSFT 521.604 pnl=5.2bp timeout
+2026-11-03 22:00:03 market closed, exiting
+2026-11-04 14:28:02 fast bot start LIVE replay_h 0

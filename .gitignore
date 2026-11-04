@@ -1,0 +1,5 @@
+*.env
+run.sh
+run_fast.sh
+.venv/
+__pycache__/
