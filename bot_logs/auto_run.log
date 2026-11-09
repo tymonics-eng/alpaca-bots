@@ -66,3 +66,27 @@ Orders (1 sells, 2 buys), held now $17.76:
   SELL IWM    close position -> PLANNED
   BUY  XLB             $1.25 -> PLANNED
   BUY  XLF             $1.44 -> PLANNED
+
+=== TREND MODE 2026-11-09 23:50:26 | market open: False | stake $19.61 (started $20.00) ===
+Signal date: 2026-11-09 | tranche rebalance on this signal: no
+Target portfolio:
+  DIA    14.61%   $    2.87
+  SPY    11.94%   $    2.34
+  XLP    10.72%   $    2.10
+  XLV     9.67%   $    1.90
+  XLF     9.43%   $    1.85
+  XLB     8.26%   $    1.62
+  XLE     7.69%   $    1.51
+  QQQ     6.97%   $    1.37
+  EFA     6.78%   $    1.33
+  XLK     5.16%   $    1.01
+  XLU     2.75%   $    0.54
+  XLY     2.21%   $    0.43
+  EEM     1.96%   $    0.38
+  IEF     1.85%   $    0.36
+
+Orders (1 sells, 2 buys), held now $18.20:
+  market closed, so nothing is sent. Run again during market hours.
+  SELL IWM    close position -> PLANNED
+  BUY  XLB             $1.27 -> PLANNED
+  BUY  XLF             $1.45 -> PLANNED
