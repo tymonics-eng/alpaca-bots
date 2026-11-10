@@ -1,7 +1,7 @@
 name: long-bot
+# Started on time by an external scheduler (cron-job.org) through the GitHub API.
+# GitHub's own cron was dropped: on this repo it started runs 5-9 hours late, after the market had closed.
 on:
-  schedule:
-    - cron: "30 15 * * 1-5"   # 15:30 UTC = 16:30 Warsaw in winter, 17:30 in summer; both are inside US market hours
   workflow_dispatch: {}
 permissions:
   contents: write
