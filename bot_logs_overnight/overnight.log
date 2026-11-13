@@ -22,3 +22,7 @@
 2026-11-13 13:20:55 UTC waiting 70.1 min until 1 min after open
 2026-11-13 14:31:00 UTC SELL QQQ filled 0.029417498 @ 686.278
 2026-11-13 14:31:01 UTC done
+2026-11-13 19:50:41 UTC overnight bot start mode=buy dry=False
+2026-11-13 19:50:41 UTC waiting 64.3 min until 5 min before close
+2026-11-13 20:55:00 UTC not enough cash (0.05)
+2026-11-13 20:55:00 UTC done
