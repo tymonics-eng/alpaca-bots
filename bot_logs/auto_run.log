@@ -176,3 +176,23 @@ Target portfolio:
 Orders (1 sells, 1 buys), held now $19.56:
   SELL EEM    close position -> SUBMITTED ed622237-f94f-43df-a501-0060f68a67fd
   BUY  IEF             $1.07 -> SUBMITTED 5436fc39-5805-4796-9237-cbeeb241d96d
+
+=== TREND MODE 2026-11-16 15:45:54 | market open: True | stake $19.48 (started $20.00) ===
+Signal date: 2026-11-13 | tranche rebalance on this signal: no
+Target portfolio:
+  DIA    13.64%   $    2.66
+  XLF    11.92%   $    2.32
+  SPY    10.72%   $    2.09
+  XLB    10.66%   $    2.08
+  XLP     9.99%   $    1.95
+  XLV     9.20%   $    1.79
+  XLE     7.28%   $    1.42
+  EFA     6.03%   $    1.17
+  IEF     5.62%   $    1.09
+  QQQ     4.58%   $    0.89
+  XLY     4.20%   $    0.82
+  XLK     3.41%   $    0.66
+  XLU     2.75%   $    0.54
+
+Orders (0 sells, 0 buys), held now $19.49:
+  none: the portfolio is already within $1 of target.
