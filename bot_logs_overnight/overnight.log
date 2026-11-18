@@ -46,3 +46,7 @@
 2026-11-18 13:20:42 UTC waiting 70.3 min until 1 min after open
 2026-11-18 14:31:00 UTC no positions to sell
 2026-11-18 14:31:00 UTC done
+2026-11-18 19:50:40 UTC overnight bot start mode=buy dry=False
+2026-11-18 19:50:40 UTC waiting 64.3 min until 5 min before close
+2026-11-18 20:55:00 UTC BUY filled 0.030534443 @ 660.238
+2026-11-18 20:55:00 UTC done
