@@ -236,3 +236,23 @@ Target portfolio:
 
 Orders (0 sells, 0 buys), held now $18.96:
   none: the portfolio is already within $1 of target.
+
+=== TREND MODE 2026-11-19 15:45:53 | market open: True | stake $18.81 (started $20.00) ===
+Signal date: 2026-11-18 | tranche rebalance on this signal: no
+Target portfolio:
+  DIA    13.64%   $    2.57
+  XLF    11.92%   $    2.24
+  SPY    10.72%   $    2.02
+  XLB    10.66%   $    2.01
+  XLP     9.99%   $    1.88
+  XLV     9.20%   $    1.73
+  XLE     7.28%   $    1.37
+  EFA     6.03%   $    1.13
+  IEF     5.62%   $    1.06
+  QQQ     4.58%   $    0.86
+  XLY     4.20%   $    0.79
+  XLK     3.41%   $    0.64
+  XLU     2.75%   $    0.52
+
+Orders (0 sells, 0 buys), held now $18.82:
+  none: the portfolio is already within $1 of target.
