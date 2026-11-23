@@ -8,3 +8,4 @@ time_utc,side,symbol,qty,price,notional,equity_after,note
 2026-11-18T20:55:00+00:00,buy,QQQ,0.030534443,660.238,20.16,20.22,close entry
 2026-11-19T14:31:01+00:00,sell,QQQ,0.030534443,671.622,20.51,20.56,open exit
 2026-11-20T20:55:01+00:00,buy,QQQ,0.033656421,608.502,20.48,20.54,close entry
+2026-11-23T14:31:00+00:00,sell,QQQ,0.033656421,651.764,21.94,21.99,open exit
