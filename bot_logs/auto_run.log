@@ -298,3 +298,23 @@ Orders (2 sells, 1 buys), held now $18.75:
   SELL QQQ             $1.24 -> SUBMITTED 9b8ba3c2-09a3-42c0-9ba7-f8a259041cec
   SELL SPY             $1.70 -> SUBMITTED 6684d747-cc02-4047-a805-f8f34457c1e7
   BUY  IEF             $2.58 -> SUBMITTED de1d0d25-de09-43fa-8449-3c89977ed2ad
+
+=== TREND MODE 2026-11-24 15:46:02 | market open: True | stake $18.72 (started $20.00) ===
+Signal date: 2026-11-23 | tranche rebalance on this signal: no
+Target portfolio:
+  IEF    19.51%   $    3.65
+  XLF    11.62%   $    2.18
+  XLP    10.25%   $    1.92
+  DIA     9.89%   $    1.85
+  XLV     9.62%   $    1.80
+  XLB     7.88%   $    1.47
+  XLE     7.41%   $    1.39
+  SPY     6.77%   $    1.27
+  EFA     6.03%   $    1.13
+  XLY     4.20%   $    0.79
+  XLU     2.75%   $    0.52
+  QQQ     2.31%   $    0.43
+  XLK     1.75%   $    0.33
+
+Orders (0 sells, 0 buys), held now $18.38:
+  none: the portfolio is already within $1 of target.
