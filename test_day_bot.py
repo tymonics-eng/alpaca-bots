@@ -126,5 +126,13 @@ class Timing(unittest.TestCase):
         self.assertEqual(d.next_check(n("09:50:21"), CFG), n("09:55:03"))
         self.assertEqual(d.next_check(n("09:58:59"), CFG), n("10:00:03"))
 
+class AllIn(unittest.TestCase):
+    def test_uses_all_settled_cash(self):
+        cfg = d.load_cfg(str(d.HERE / "day_bot_config.json"))
+        self.assertEqual(d.size({"entry": 6.90, "risk": 0.12}, cfg, 21.20, 21.20)[0], 3)     # $20.70 of $21.20
+        self.assertEqual(d.size({"entry": 20.50, "risk": 0.30}, cfg, 21.20, 21.20)[0], 1)
+        self.assertEqual(d.size({"entry": 21.00, "risk": 0.30}, cfg, 21.20, 21.20)[0], 0)          # over the 2% buffer
+        self.assertEqual(d.size({"entry": 5.00, "risk": 0.30}, cfg, 21.20, 21.20), (3, "max loss"))  # $1 max loss still holds
+
 if __name__ == "__main__":
     unittest.main()

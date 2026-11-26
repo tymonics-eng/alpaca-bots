@@ -269,8 +269,11 @@ def trade(cfg, live):
         if syms is None:
             syms = universe(cfg)
             px = latest_prices(syms) if syms else {}
-            syms = [s for s in syms if cfg["min_price"] <= px.get(s, 0) <= cfg["max_price"]]
-            log(f"universe: {len(syms)} symbols priced ${cfg['min_price']}-${cfg['max_price']}: {' '.join(syms[:40])}")
+            a = call("GET", "/account")
+            cash = min(float(a["cash"]), float(a.get("non_marginable_buying_power") or a["cash"]))
+            top = min(cfg["max_price"], cash * (1 - cfg["cash_buffer_pct"] / 100))   # one share must fit in settled cash
+            syms = [s for s in syms if cfg["min_price"] <= px.get(s, 0) <= top]
+            log(f"settled cash {cash:.2f}; universe: {len(syms)} symbols priced ${cfg['min_price']}-${top:.2f}: {' '.join(syms[:40])}")
             if not syms: log("no symbols in the price band"); break
         try:
             step(cfg, live, day, t, syms, tried, now)
@@ -348,17 +351,18 @@ def yahoo_bars(symbols, start, end):
         out[s] = rows; time.sleep(0.3)
     return out
 
-def replay(cfg, day, symbols, source="alpaca", close_hm=None):
+def replay(cfg, day, symbols, source="alpaca", close_hm=None, start_cash=21.20):
     cl = at(day, close_hm) if close_hm else close_time(day)
     if cl is None: sys.exit(f"{day} is not a trading day")
     t = session_times(day, cfg, cl)
     syms = symbols or universe(cfg)
     bars = (yahoo_bars if source == "yahoo" else bars_5m)(syms, t["open"], cl)
     first = {s: b[0]["o"] for s, b in bars.items() if b}
-    syms = [s for s in syms if cfg["min_price"] <= first.get(s, 0) <= cfg["max_price"]]
+    top = min(cfg["max_price"], start_cash * (1 - cfg["cash_buffer_pct"] / 100))
+    syms = [s for s in syms if cfg["min_price"] <= first.get(s, 0) <= top]
     print(f"Replay {day}: close {cl:%H:%M}, entries {t['first_entry']:%H:%M}-{t['last_entry']:%H:%M}, flat by {t['flat_by']:%H:%M} ET; "
-          f"{len(syms)} symbols in ${cfg['min_price']}-${cfg['max_price']}")
-    cash = cfg["budget"]; settled = cash; used = {"trades": 0, "risk": 0.0}; pnl = 0.0; open_until = None
+          f"{len(syms)} symbols in ${cfg['min_price']}-${top:.2f}")
+    cash = start_cash; settled = cash; used = {"trades": 0, "risk": 0.0}; pnl = 0.0; open_until = None
     # Under $2,000 Alpaca treats the account like a cash account: sale proceeds settle the next day (T+1),
     # so each buy uses up settled cash for the rest of the day, as the live bot sees it.
     events = []
@@ -384,7 +388,7 @@ def replay(cfg, day, symbols, source="alpaca", close_hm=None):
         open_until = bar_time(after[exit_i]) + timedelta(minutes=5)
         p = round(qty * (px - plan["entry"]), 2); pnl += p; used["trades"] += 1; used["risk"] += risk; settled -= qty * plan["entry"]
         print(f"  {end:%H:%M} {s:6} buy {qty} @ {plan['entry']:.2f} stop {plan['stop']:.2f} target {plan['target']:.2f} risk ${risk:.2f} -> {how} {px:.2f}  P&L {p:+.2f}")
-    print(f"Trades {used['trades']}, P&L {pnl:+.2f} on ${cfg['budget']:.2f} (before fees; fills at next bar open; stop first when a bar touches both)")
+    print(f"Trades {used['trades']}, P&L {pnl:+.2f} on ${start_cash:.2f} (before fees; fills at next bar open; stop first when a bar touches both)")
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
@@ -393,12 +397,13 @@ if __name__ == "__main__":
     ap.add_argument("--symbols", help="comma-separated, replay only (default: Alpaca most-actives now)")
     ap.add_argument("--yahoo", action="store_true", help="replay from keyless Yahoo bars (needs --symbols and --close)")
     ap.add_argument("--close", metavar="HH:MM", help="replay: the session close in New York time (skips Alpaca's calendar)")
+    ap.add_argument("--cash", type=float, default=21.20, help="replay: starting cash (default 21.20)")
     ap.add_argument("--config", default=str(HERE / "day_bot_config.json"))
     ap.add_argument("--live", action="store_true", help="place orders (paper endpoint). Without it: dry run")
     a = ap.parse_args(); cfg = load_cfg(a.config)
     if a.yahoo and not (a.symbols and a.close): ap.error("--yahoo needs --symbols and --close")
     if a.replay: replay(cfg, date.fromisoformat(a.replay), [s.strip().upper() for s in a.symbols.split(",")] if a.symbols else None,
-                        "yahoo" if a.yahoo else "alpaca", a.close)
+                        "yahoo" if a.yahoo else "alpaca", a.close, a.cash)
     elif a.mode == "trade": trade(cfg, a.live)
     elif a.mode == "flatten": flatten(datetime.now(ET).date(), a.live)
     else: ap.error("pass --mode trade, --mode flatten or --replay DATE")
