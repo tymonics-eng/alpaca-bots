@@ -1,0 +1,42 @@
+name: day-bot
+# Opening-range breakout day trader (paper). Started by an external scheduler (cron-job.org) through the GitHub API:
+#   ~09:40 ET  mode=trade    (runs the session: entries 09:45 to the cutoff, flat by the close; early closes handled)
+#   ~15:50 ET  mode=flatten  (backstop: closes anything the bot opened if the trade job ran out of time)
+# Account: the $21 fast-bot paper account (DAY_* secrets if set, otherwise the FAST_* ones).
+# live=true (the default) places paper orders the moment a 5-minute bar closes above the opening range.
+# live=false is a dry run: it logs every order it would send and places none.
+on:
+  workflow_dispatch:
+    inputs:
+      mode: { description: "trade or flatten", required: true, default: "trade" }
+      live: { description: "true places paper orders, false is a dry run", required: true, default: "true" }
+permissions:
+  contents: write
+concurrency:
+  group: day-bot-${{ inputs.mode }}
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Check inputs
+        id: m
+        run: |
+          case "${{ inputs.mode }}" in trade|flatten) ;; *) echo "bad mode"; exit 1;; esac
+          case "${{ inputs.live }}" in true) echo "flag=--live" >> $GITHUB_OUTPUT;; false) echo "flag=" >> $GITHUB_OUTPUT;; *) echo "bad live"; exit 1;; esac
+      - name: Offline tests
+        run: python -m unittest test_day_bot
+      - name: Run day bot
+        env:
+          APCA_API_KEY_ID: ${{ secrets.DAY_KEY_ID || secrets.FAST_KEY_ID }}
+          APCA_API_SECRET_KEY: ${{ secrets.DAY_SECRET || secrets.FAST_SECRET }}
+        run: python day_bot.py --mode ${{ inputs.mode }} ${{ steps.m.outputs.flag }}
+      - name: Save logs
+        if: always()
+        run: |
+          git config user.name "bot"; git config user.email "bot@users.noreply.github.com"
+          git add bot_logs_day || true
+          git diff --cached --quiet || (git commit -m "day bot ${{ inputs.mode }} $(date -u +%F)" && git pull --rebase && git push)
