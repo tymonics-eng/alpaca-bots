@@ -90,3 +90,6 @@
 2026-11-25 19:50:41 UTC waiting 64.3 min until 5 min before close
 2026-11-25 20:55:00 UTC not enough cash (0.05)
 2026-11-25 20:55:00 UTC done
+2026-11-26 13:20:50 UTC overnight bot start mode=sell dry=False
+2026-11-26 13:20:50 UTC open is 1509 min away, exiting
+2026-11-26 13:20:50 UTC done
