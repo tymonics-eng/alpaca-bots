@@ -20,6 +20,8 @@
   "universe_top": 100,
   "min_or_volume": 5000,
   "extra_symbols": [],
+  "universe_source": "scanner",
+  "watchlist_file": "scan/watchlist.json",
   "blocked": ["SQQQ", "TQQQ", "SOXL", "SOXS", "TZA", "TNA", "UVXY", "SPXS", "SPXU", "LABU", "LABD", "TSLL", "NVDL"],
   "poll_seconds": 60,
   "check_offsets_s": [3, 20],

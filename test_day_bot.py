@@ -134,5 +134,22 @@ class AllIn(unittest.TestCase):
         self.assertEqual(d.size({"entry": 21.00, "risk": 0.30}, cfg, 21.20, 21.20)[0], 0)          # over the 2% buffer
         self.assertEqual(d.size({"entry": 5.00, "risk": 0.30}, cfg, 21.20, 21.20), (3, "max loss"))  # $1 max loss still holds
 
+class Scanner(unittest.TestCase):
+    def _w(self, made):
+        import json, tempfile, os
+        f = tempfile.NamedTemporaryFile("w", suffix=".json", delete=False)
+        json.dump({"created_at": made, "as_of": "2026-11-25 close", "hits": [{"symbol": "NU"}, {"symbol": "F"}]}, f); f.close()
+        self.addCleanup(os.unlink, f.name); return f.name
+    def test_todays_scan_is_used(self):
+        syms, note = d.scanner_symbols(self._w("2026-11-27T14:05:00Z"), date(2026, 11, 27))
+        self.assertEqual(syms, ["NU", "F"])
+    def test_stale_scan_trades_nothing(self):
+        syms, note = d.scanner_symbols(self._w("2026-11-26T14:05:00Z"), date(2026, 11, 27))
+        self.assertEqual(syms, []); self.assertIn("not today", note)
+    def test_missing_scan_trades_nothing(self):
+        self.assertEqual(d.scanner_symbols("/nonexistent/watchlist.json", date(2026, 11, 27))[0], [])
+    def test_replay_accepts_any_date(self):
+        self.assertEqual(d.scanner_symbols(self._w("2026-11-20T14:05:00Z"))[0], ["NU", "F"])
+
 if __name__ == "__main__":
     unittest.main()

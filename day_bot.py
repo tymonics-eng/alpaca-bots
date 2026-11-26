@@ -31,7 +31,8 @@ DEFAULTS = {
     "max_loss_per_trade_usd": 1.0, "max_daily_loss_usd": 2.0, "max_trades_per_day": 3, "min_reward_risk": 1.0,
     "target_r": 1.0, "or_minutes": 15, "no_entries_before": "09:45", "no_entries_after": "15:30", "flat_by": "15:55",
     "min_price": 2.0, "max_price": 15.90, "min_risk_pct": 0.5, "max_chase_r": 0.5, "universe_top": 100,
-    "min_or_volume": 5000, "extra_symbols": [], "blocked": [], "poll_seconds": 60, "check_offsets_s": [3, 20], "max_run_minutes": 340,
+    "min_or_volume": 5000, "extra_symbols": [],
+    "universe_source": "scanner", "watchlist_file": "scan/watchlist.json", "blocked": [], "poll_seconds": 60, "check_offsets_s": [3, 20], "max_run_minutes": 340,
 }
 
 # ---------------------------------------------------------------- pure rules (tested offline)
@@ -173,12 +174,31 @@ def bars_5m(symbols, start, end):
     return out
 
 def latest_prices(symbols):
-    r = call("GET", DATA + "/v2/stocks/trades/latest", params={"symbols": ",".join(symbols), "feed": "iex"}) or {}
-    return {s: t["p"] for s, t in (r.get("trades") or {}).items()}
+    out = {}
+    for i in range(0, len(symbols), 100):
+        r = call("GET", DATA + "/v2/stocks/trades/latest", params={"symbols": ",".join(symbols[i:i + 100]), "feed": "iex"}) or {}
+        out.update({s: t["p"] for s, t in (r.get("trades") or {}).items()})
+    return out
 
-def universe(cfg):
-    r = call("GET", DATA + "/v1beta1/screener/stocks/most-actives", params={"by": "volume", "top": cfg["universe_top"]}) or {}
-    syms = [x["symbol"] for x in r.get("most_actives", [])] + list(cfg["extra_symbols"])
+def scanner_symbols(path, day=None):
+    """Tickers from the trader-scanner watchlist (scan.py daily). With day: only a scan made that day (New York).
+    Returns (symbols, note)."""
+    f = Path(path) if Path(path).is_absolute() else HERE / path
+    if not f.exists(): return [], f"no scanner watchlist at {f.name}"
+    w = json.loads(f.read_text())
+    made = datetime.fromisoformat(w["created_at"].replace("Z", "+00:00")).astimezone(ET)
+    if day is not None and made.date() != day:
+        return [], f"scanner watchlist is from {made:%Y-%m-%d %H:%M} ET, not today: the scan job did not run"
+    syms = [h["symbol"] for h in w.get("hits", [])]
+    return syms, f"scanner watchlist {made:%Y-%m-%d %H:%M} ET ({w.get('as_of', '?')}): {len(syms)} setups"
+
+def universe(cfg, day=None):
+    if cfg["universe_source"] == "scanner":
+        syms, note = scanner_symbols(cfg["watchlist_file"], day); log(note)
+    else:
+        r = call("GET", DATA + "/v1beta1/screener/stocks/most-actives", params={"by": "volume", "top": cfg["universe_top"]}) or {}
+        syms = [x["symbol"] for x in r.get("most_actives", [])]
+    syms = syms + list(cfg["extra_symbols"])
     syms = [s for s in dict.fromkeys(syms) if re.fullmatch(r"[A-Z]{1,5}", s) and s not in cfg["blocked"]]
     return syms
 
@@ -267,7 +287,7 @@ def trade(cfg, live):
         if now < t["open"] + timedelta(minutes=cfg["or_minutes"]) or now > t["last_entry"] + timedelta(minutes=5):
             time.sleep(min(cfg["poll_seconds"], max(5, (stop_at - now).total_seconds()))); continue
         if syms is None:
-            syms = universe(cfg)
+            syms = universe(cfg, day)
             px = latest_prices(syms) if syms else {}
             a = call("GET", "/account")
             cash = min(float(a["cash"]), float(a.get("non_marginable_buying_power") or a["cash"]))
