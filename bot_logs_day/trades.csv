@@ -2,3 +2,4 @@ time_utc,symbol,side,qty,entry,stop,target,risk_usd,status,fill,note
 2026-11-27T14:50:06+00:00,YSS,buy,5,4.12,3.94,4.3,0.9,filled,4.13,max loss
 2026-11-27T16:10:07+00:00,AG,buy,1,12.04,11.92,12.15,0.12,filled,12.04,position cap
 2026-11-27T16:15:09+00:00,SEAT,buy,3,2.54,2.26,2.82,0.84,filled,2.54,max loss
+2026-11-27T20:51:24+00:00,SEAT,sell,3,,,,,accepted,,flat by close
