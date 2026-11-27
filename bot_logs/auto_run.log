@@ -359,3 +359,23 @@ Target portfolio:
 Orders (1 sells, 0 buys), held now $18.52:
   market closed, so nothing is sent. Run again during market hours.
   SELL DIA             $1.01 -> PLANNED
+
+=== TREND MODE 2026-11-27 15:46:00 | market open: True | stake $19.01 (started $20.00) ===
+Signal date: 2026-11-25 | tranche rebalance on this signal: no
+Target portfolio:
+  IEF    19.51%   $    3.71
+  XLF    11.62%   $    2.21
+  XLP    10.25%   $    1.95
+  DIA     9.89%   $    1.88
+  XLV     9.62%   $    1.83
+  XLB     7.88%   $    1.50
+  XLE     7.41%   $    1.41
+  SPY     6.77%   $    1.29
+  EFA     6.03%   $    1.15
+  XLY     4.20%   $    0.80
+  XLU     2.75%   $    0.52
+  QQQ     2.31%   $    0.44
+  XLK     1.75%   $    0.33
+
+Orders (1 sells, 0 buys), held now $18.67:
+  SELL DIA             $1.02 -> SUBMITTED a631ee3a-47e8-47a5-8631-05fc8ee1a6f5
