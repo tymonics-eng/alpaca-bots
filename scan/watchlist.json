@@ -1,9 +1,9 @@
 {
   "created_by": "trader-scanner",
-  "created_at": "2026-11-26T18:42:57Z",
+  "created_at": "2026-11-27T14:00:26Z",
   "mode": "daily",
   "as_of": "2026-11-25 close",
-  "universe": 5924,
+  "universe": 5922,
   "scanned": 2336,
   "failed": 0,
   "source": "yahoo",
